@@ -27,10 +27,18 @@ export function CourseNavigation({
   useEffect(() => {
     const navigation = navigationRef.current;
     const viewport = navigation?.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]');
-    if (!viewport) return;
+    if (!navigation || !viewport) return;
 
     const storageKey = "react-course-navigation-scroll";
+    const navigationEntry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    const shouldFocusActive = navigationEntry?.type === "reload";
+
     const restoreScroll = () => {
+      if (shouldFocusActive) {
+        navigation.querySelector<HTMLElement>('[aria-current="page"]')?.scrollIntoView({ block: "nearest" });
+        return;
+      }
+
       const savedScroll = window.sessionStorage.getItem(storageKey);
       if (savedScroll) viewport.scrollTop = Number(savedScroll);
     };
@@ -83,6 +91,7 @@ export function CourseNavigation({
           <Link
             href="/labs"
             onClick={onNavigate}
+            aria-current={pathname === "/labs" ? "page" : undefined}
             className={cn(
               "mb-1 flex min-h-9 items-center gap-2 rounded-md px-2 text-sm text-muted-foreground transition-[background-color,color] duration-300 ease-out hover:bg-muted hover:text-foreground",
               pathname === "/labs" && "bg-muted font-medium text-foreground",
