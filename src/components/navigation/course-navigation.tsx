@@ -21,18 +21,39 @@ export function CourseNavigation({
   className?: string;
 }) {
   const pathname = usePathname();
-  const activeRef = useRef<HTMLAnchorElement>(null);
+  const navigationRef = useRef<HTMLDivElement>(null);
   const { hydrated, isComplete } = useProgress();
 
   useEffect(() => {
-    activeRef.current?.scrollIntoView({ block: "nearest" });
+    const navigation = navigationRef.current;
+    const viewport = navigation?.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]');
+    if (!viewport) return;
+
+    const storageKey = "react-course-navigation-scroll";
+    const restoreScroll = () => {
+      const savedScroll = window.sessionStorage.getItem(storageKey);
+      if (savedScroll) viewport.scrollTop = Number(savedScroll);
+    };
+
+    const saveScroll = () => {
+      window.sessionStorage.setItem(storageKey, String(viewport.scrollTop));
+    };
+
+    restoreScroll();
+    const frame = window.requestAnimationFrame(restoreScroll);
+    viewport.addEventListener("scroll", saveScroll, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      viewport.removeEventListener("scroll", saveScroll);
+    };
   }, [pathname]);
 
   return (
-    <ScrollArea className={cn("h-full", className)}>
+    <div ref={navigationRef} className="h-full">
+      <ScrollArea className={cn("course-navigation-scroll-area h-full", className)}>
       <nav aria-label="Материалы курса" className="space-y-6 p-4">
         <div>
-          <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Лекции</p>
+          <p className="mb-2 px-2 text-xs font-medium tracking-wider text-muted-foreground">Лекции</p>
           <ol className="space-y-0.5">
             {lectures.map((lecture) => {
               const active = pathname === lecture.href;
@@ -40,18 +61,17 @@ export function CourseNavigation({
               return (
                 <li key={lecture.id}>
                   <Link
-                    ref={active ? activeRef : undefined}
                     href={lecture.href}
                     onClick={onNavigate}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex min-h-9 items-start gap-2 rounded-md px-2 py-2 text-sm leading-5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      "flex min-h-9 items-start gap-2 rounded-md px-2 py-2 text-sm leading-5 text-muted-foreground transition-[background-color,color] duration-300 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       active && "bg-muted font-medium text-foreground",
                     )}
                   >
                     <span className="w-5 shrink-0 font-mono text-xs leading-5 tabular-nums">{String(lecture.number).padStart(2, "0")}</span>
                     <span className="min-w-0 flex-1">{lecture.title}</span>
-                    {complete && <CircleCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-label="Завершено" />}
+                    <CircleCheck className="status-icon mt-0.5 size-4 shrink-0 text-primary" data-complete={complete} aria-label={complete ? "Завершено" : undefined} aria-hidden={!complete} />
                   </Link>
                 </li>
               );
@@ -59,12 +79,12 @@ export function CourseNavigation({
           </ol>
         </div>
         <div>
-          <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Практика</p>
+          <p className="mb-2 px-2 text-xs font-medium tracking-wider text-muted-foreground">Лабораторные работы</p>
           <Link
             href="/labs"
             onClick={onNavigate}
             className={cn(
-              "mb-1 flex min-h-9 items-center gap-2 rounded-md px-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground",
+              "mb-1 flex min-h-9 items-center gap-2 rounded-md px-2 text-sm text-muted-foreground transition-[background-color,color] duration-300 ease-out hover:bg-muted hover:text-foreground",
               pathname === "/labs" && "bg-muted font-medium text-foreground",
             )}
           >
@@ -77,18 +97,17 @@ export function CourseNavigation({
               return (
                 <li key={lab.id}>
                   <Link
-                    ref={active ? activeRef : undefined}
                     href={lab.href}
                     onClick={onNavigate}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex min-h-9 items-start gap-2 rounded-md px-2 py-2 text-sm leading-5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                      "flex min-h-9 items-start gap-2 rounded-md px-2 py-2 text-sm leading-5 text-muted-foreground transition-[background-color,color] duration-300 ease-out hover:bg-muted hover:text-foreground",
                       active && "bg-muted font-medium text-foreground",
                     )}
                   >
                     <span className="w-5 shrink-0 font-mono text-xs leading-5 tabular-nums">Л{lab.number}</span>
                     <span className="min-w-0 flex-1">{lab.title.replace(/^Лабораторная работа №\d+\.\s*/, "")}</span>
-                    {complete && <CircleCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-label="Выполнено" />}
+                    <CircleCheck className="status-icon mt-0.5 size-4 shrink-0 text-primary" data-complete={complete} aria-label={complete ? "Выполнено" : undefined} aria-hidden={!complete} />
                   </Link>
                 </li>
               );
@@ -96,6 +115,7 @@ export function CourseNavigation({
           </ol>
         </div>
       </nav>
-    </ScrollArea>
+      </ScrollArea>
+    </div>
   );
 }

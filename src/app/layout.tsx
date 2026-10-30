@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { AppHeader } from "@/components/layout/app-header";
+import { PersistentCourseFrame } from "@/components/layout/persistent-course-frame";
 import { getMaterialSummaries, getSearchIndex } from "@/lib/course";
 
 const geist = Geist({ subsets: ["latin", "cyrillic"], variable: "--font-geist" });
@@ -28,7 +29,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <Providers>
           <a href="#main-content" className="skip-link">Перейти к содержимому</a>
           <AppHeader lectures={lectures} labs={labs} searchEntries={searchEntries} />
-          {children}
+          <PersistentCourseFrame lectures={lectures} labs={labs}>
+            {children}
+          </PersistentCourseFrame>
         </Providers>
       </body>
     </html>

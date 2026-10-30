@@ -25,7 +25,7 @@ export default async function LecturePage({ params }: { params: Promise<{ slug: 
   const index = summaries.lectures.findIndex((lecture) => lecture.id === material.id);
 
   return (
-    <CourseShell lectures={summaries.lectures} labs={summaries.labs} headings={material.headings}>
+    <CourseShell headings={material.headings}>
       <LastLecture href={material.href} />
       <div id="main-content" className="mx-auto max-w-[70ch]">
         <p className="mb-3 flex items-center gap-2 text-sm text-muted-foreground"><BookOpen className="size-4" /> Лекция {String(material.number).padStart(2, "0")}</p>

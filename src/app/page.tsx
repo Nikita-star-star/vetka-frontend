@@ -50,8 +50,8 @@ export default async function HomePage() {
       </section>
 
       <section className="flex flex-col gap-5 border-t py-10 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-3"><FlaskConical className="mt-1 size-5 shrink-0" /><div><h2 className="font-semibold">Лабораторные работы</h2><p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Три практических этапа: от каталога задач до приложения с API и маршрутизацией.</p></div></div>
-        <Link href="/labs" className={cn(buttonVariants({ variant: "outline" }), "gap-2")}>Перейти к практике <ArrowRight /></Link>
+        <div className="flex gap-3"><FlaskConical className="mt-1 size-5 shrink-0" /><div><h2 className="font-semibold">Лабораторные работы</h2><p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Три этапа лабораторных работ: от каталога задач до приложения с API и маршрутизацией.</p></div></div>
+        <Link href="/labs" className={cn(buttonVariants({ variant: "outline" }), "gap-2")}>Перейти к лабораторным работам <ArrowRight /></Link>
       </section>
     </main>
   );

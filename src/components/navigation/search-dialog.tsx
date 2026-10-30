@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, FlaskConical, Search } from "lucide-react";
+import { BookOpen, FlaskConical, History, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -19,10 +19,46 @@ function normalize(value: string) {
   return value.toLocaleLowerCase("ru").replace(/ё/g, "е");
 }
 
+function searchTerm(query: string) {
+  return query.trim().split(/\s+/).filter(Boolean).sort((a, b) => b.length - a.length)[0] ?? "";
+}
+
+function SearchFragment({ text, query }: { text: string; query: string }) {
+  const term = searchTerm(query);
+  if (!term) return null;
+  const index = normalize(text).indexOf(normalize(term));
+  if (index < 0) return <>{text.slice(0, 150)}{text.length > 150 ? "…" : ""}</>;
+
+  const start = Math.max(0, index - 56);
+  const end = Math.min(text.length, index + term.length + 92);
+  return (
+    <>
+      {start > 0 ? "…" : ""}
+      {text.slice(start, index)}
+      <mark className="search-result-highlight">{text.slice(index, index + term.length)}</mark>
+      {text.slice(index + term.length, end)}
+      {end < text.length ? "…" : ""}
+    </>
+  );
+}
+
+const SEARCH_HISTORY_KEY = "react-course-search-history";
+
 export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [history, setHistory] = useState<string[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(SEARCH_HISTORY_KEY);
+      const parsed = saved ? JSON.parse(saved) : [];
+      if (Array.isArray(parsed)) window.setTimeout(() => setHistory(parsed.filter((item) => typeof item === "string").slice(0, 2)), 0);
+    } catch {
+      // Search remains available when local storage is disabled or malformed.
+    }
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -55,9 +91,23 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
       .map((result) => result.entry);
   }, [entries, query]);
 
-  const select = (href: string) => {
+  const select = (entry: SearchEntry) => {
+    const search = query.trim();
+    if (search) {
+      const nextHistory = [search, ...history.filter((item) => item !== search)].slice(0, 2);
+      setHistory(nextHistory);
+      try {
+        window.localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(nextHistory));
+      } catch {
+        // Navigation still works when local storage is unavailable.
+      }
+    }
     setOpen(false);
     setQuery("");
+    const [path, hash] = entry.href.split("#");
+    const href = search
+      ? `${path}?highlight=${encodeURIComponent(search)}${hash ? `#${hash}` : ""}`
+      : entry.href;
     router.push(href);
   };
 
@@ -72,7 +122,10 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
       </Button>
       <CommandDialog
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={(value) => {
+          setOpen(value);
+          if (!value) setQuery("");
+        }}
         title="Поиск по курсу"
         description="Ищите по лекциям, лабораторным и разделам"
         className="top-[18%] sm:max-w-xl"
@@ -81,15 +134,30 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
           <CommandInput value={query} onValueChange={setQuery} placeholder="Компоненты, useState, Fetch…" autoFocus />
           <CommandList>
             <CommandEmpty>Ничего не найдено. Попробуйте другой запрос.</CommandEmpty>
+            {!query.trim() && history.length > 0 && (
+              <CommandGroup heading="Недавние поиски">
+                {history.map((item) => (
+                  <CommandItem key={`history-${item}`} value={`history-${item}`} onSelect={() => setQuery(item)}>
+                    <History className="text-muted-foreground" />
+                    <span className="truncate">{item}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
             <CommandGroup heading={query ? "Результаты" : "Материалы курса"}>
               {results.map((entry) => (
-                <CommandItem key={entry.id} value={entry.id} onSelect={() => select(entry.href)} className="items-start py-2.5">
+                <CommandItem key={entry.id} value={entry.id} onSelect={() => select(entry)} className="items-start py-2.5">
                   {entry.kind === "lecture" ? <BookOpen className="mt-0.5" /> : <FlaskConical className="mt-0.5" />}
                   <span className="min-w-0">
                     <span className="block truncate font-medium">{entry.section ?? entry.title}</span>
                     <span className="block truncate text-xs text-muted-foreground">
                       {entry.section ? entry.title : entry.kind === "lecture" ? "Лекция" : "Лабораторная работа"}
                     </span>
+                    {query.trim() && (
+                      <span className="mt-1 block line-clamp-2 text-xs leading-5 text-muted-foreground">
+                        <SearchFragment text={entry.excerpt} query={query} />
+                      </span>
+                    )}
                   </span>
                 </CommandItem>
               ))}

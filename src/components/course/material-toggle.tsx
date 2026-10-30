@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, RotateCcw } from "lucide-react";
+import { Check, RotateCcw } from "lucide";
+import { MorphIcon } from "morphicons/react";
 import { Button } from "@/components/ui/button";
 import { useProgress } from "@/components/course/progress-provider";
 import type { MaterialKind } from "@/lib/course-types";
@@ -17,7 +18,12 @@ export function MaterialToggle({ id, kind }: { id: string; kind: MaterialKind })
       onClick={() => toggleComplete(kind, id)}
       aria-pressed={complete}
     >
-      {complete ? <RotateCcw /> : <Check />}
+      <MorphIcon
+        icon={complete ? RotateCcw : Check}
+        className="size-4"
+        spring="smooth"
+        reducedMotion="user"
+      />
       {complete
         ? kind === "lecture"
           ? "Отменить завершение"

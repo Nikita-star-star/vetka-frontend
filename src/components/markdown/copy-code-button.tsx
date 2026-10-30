@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy } from "lucide";
+import { MorphIcon } from "morphicons/react";
 import { Button } from "@/components/ui/button";
 
 export function CopyCodeButton({ code }: { code: string }) {
@@ -19,7 +20,12 @@ export function CopyCodeButton({ code }: { code: string }) {
 
   return (
     <Button variant="ghost" size="sm" className="h-7 text-xs text-muted-foreground" onClick={copy} aria-label="Копировать код">
-      {copied ? <Check /> : <Copy />}
+      <MorphIcon
+        icon={copied ? Check : Copy}
+        className="size-4"
+        spring="smooth"
+        reducedMotion="user"
+      />
       <span className="hidden sm:inline">{copied ? "Скопировано" : "Копировать"}</span>
     </Button>
   );

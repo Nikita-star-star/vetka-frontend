@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ExternalLink } from "lucide-react";
 import { CodeBlock } from "@/components/markdown/code-block";
+import { SearchHighlight } from "@/components/markdown/search-highlight";
 import { createSlugger } from "@/lib/course";
 import type { MaterialKind } from "@/lib/course-types";
 
@@ -46,7 +48,10 @@ export function MarkdownArticle({ markdown, kind }: { markdown: string; kind: Ma
   };
 
   return (
-    <article className="typeset typeset-chat w-full max-w-[70ch]">
+    <article data-search-content className="typeset typeset-chat w-full max-w-[70ch]">
+      <Suspense fallback={null}>
+        <SearchHighlight />
+      </Suspense>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
