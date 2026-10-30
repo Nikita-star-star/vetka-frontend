@@ -109,7 +109,7 @@ export function ThemeMenu() {
   };
 
   const trigger = (
-    <Button variant="ghost" size="icon" aria-label="Выбрать тему">
+    <Button variant="ghost" size="icon" className="size-10 lg:size-8" aria-label="Выбрать тему">
       <MorphIcon
         icon={resolvedTheme === "dark" ? MoonIcon : SunIcon}
         className="size-4"

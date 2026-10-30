@@ -113,7 +113,7 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
 
   return (
     <>
-      <Button variant="outline" className="h-9 w-9 px-0 sm:w-52 sm:justify-start sm:px-3" onClick={() => setOpen(true)}>
+      <Button variant="outline" className="h-10 w-10 px-0 sm:h-9 sm:w-52 sm:justify-start sm:px-3" onClick={() => setOpen(true)}>
         <Search />
         <span className="hidden text-muted-foreground sm:inline">Поиск по курсу</span>
         <kbd className="ml-auto hidden rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground md:inline">

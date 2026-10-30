@@ -49,8 +49,8 @@ export function CourseNavigation({
   }, [pathname]);
 
   return (
-    <div ref={navigationRef} className="h-full">
-      <ScrollArea className={cn("course-navigation-scroll-area h-full", className)}>
+    <div ref={navigationRef} className={cn("h-full min-h-0", className)}>
+      <ScrollArea className="course-navigation-scroll-area h-full min-h-0">
       <nav aria-label="Материалы курса" className="space-y-6 p-4">
         <div>
           <p className="mb-2 px-2 text-xs font-medium tracking-wider text-muted-foreground">Лекции</p>

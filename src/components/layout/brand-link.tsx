@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-export function BrandLink() {
+export function BrandLink({ className }: { className?: string }) {
   const [logoTransform, setLogoTransform] = useState("translate(0px, 0px) rotate(0deg)");
 
   const randomizeLogo = () => {
@@ -20,7 +21,7 @@ export function BrandLink() {
       aria-label="Ветка_ — главная"
       onPointerEnter={randomizeLogo}
       onPointerLeave={() => setLogoTransform("translate(0px, 0px) rotate(0deg)")}
-      className="brand-link group flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className={cn("brand-link group flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", className)}
     >
       <span className="flex size-8 shrink-0 items-center justify-center">
         <Image

@@ -201,6 +201,12 @@ html {
   opacity: 1;
 }
 
+@media (max-width: 63.999rem) {
+  .course-navigation-scroll-area a {
+    min-height: 2.75rem;
+  }
+}
+
 @media (min-width: 64rem) {
   .persistent-course-frame.has-focus-mode {
     grid-template-columns: 0 minmax(0, 1fr);
