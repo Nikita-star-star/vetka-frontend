@@ -14,6 +14,7 @@ export function MaterialToggle({ id, kind }: { id: string; kind: MaterialKind })
     <Button
       variant={complete ? "outline" : "default"}
       size="lg"
+      className="h-11 w-full text-base sm:h-9 sm:w-auto sm:text-sm"
       disabled={!hydrated}
       onClick={() => toggleComplete(kind, id)}
       aria-pressed={complete}
