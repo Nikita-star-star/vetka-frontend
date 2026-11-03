@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CircleCheck, FlaskConical } from "lucide-react";
+import { Check, FlaskConical } from "lucide-react";
 import { useProgress } from "@/components/course/progress-provider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -89,11 +89,13 @@ export function CourseNavigation({
                         {String(lecture.number).padStart(2, "0")}
                       </span>
                       <span className="min-w-0 flex-1">{lecture.title}</span>
-                      <CircleCheck
-                        className="status-icon mt-0.5 size-4 shrink-0 text-primary"
+                      <span
+                        className="status-icon mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary text-white"
                         data-complete={complete}
                         aria-hidden="true"
-                      />
+                      >
+                        <Check className="size-2.5" strokeWidth={3} aria-hidden="true" />
+                      </span>
                       {complete && <span className="sr-only">Завершено</span>}
                     </Link>
                   </li>
@@ -141,11 +143,13 @@ export function CourseNavigation({
                           "",
                         )}
                       </span>
-                      <CircleCheck
-                        className="status-icon mt-0.5 size-4 shrink-0 text-primary"
+                      <span
+                        className="status-icon mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary text-white"
                         data-complete={complete}
                         aria-hidden="true"
-                      />
+                      >
+                        <Check className="size-3" strokeWidth={3} aria-hidden="true" />
+                      </span>
                       {complete && <span className="sr-only">Выполнено</span>}
                     </Link>
                   </li>

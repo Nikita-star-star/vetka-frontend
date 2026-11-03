@@ -50,3 +50,38 @@ const total = tasks.length;
 Современный **React Compiler** может автоматически мемоизировать вычисления и компоненты в проектах, где он настроен. В таком случае ручные `useMemo` часто не нужны. Vite-шаблон сам по себе не означает, что Compiler обязательно включён.
 
 Документация: [useMemo](https://react.dev/reference/react/useMemo), [React Compiler](https://react.dev/learn/react-compiler).
+
+## Как проверить, что useMemo действительно нужен
+
+Представьте фильтрацию 50 000 элементов. Прежде чем добавлять мемоизацию, измерьте время обычного вычисления с `performance.now()` или React Profiler. Если фильтрация занимает незаметную долю времени, сложность кеширования не окупится.
+
+```jsx
+import { useMemo, useState } from 'react';
+
+const items = Array.from({ length: 50000 }, (_, id) => ({
+  id, title: `Задача ${id}`
+}));
+
+export default function App() {
+  const [query, setQuery] = useState('');
+  const [theme, setTheme] = useState('light');
+  const visible = useMemo(
+    () => items.filter((item) => item.title.includes(query)),
+    [query]
+  );
+
+  return (
+    <main>
+      <input value={query} onChange={(event) => setQuery(event.target.value)} />
+      <button onClick={() => setTheme((old) => old === 'light' ? 'dark' : 'light')}>
+        Тема: {theme}
+      </button>
+      <p>Совпадений: {visible.length}</p>
+    </main>
+  );
+}
+```
+
+`items` определён вне компонента и сохраняет ссылку. При изменении `theme` компонент рендерится снова, но `query` остаётся прежним, и React может вернуть кешированный результат. При вводе нового запроса зависимость меняется и фильтрация выполняется заново. Следовательно, `useMemo` ускоряет только определённые повторные вычисления; он не ускоряет саму фильтрацию при новом вводе.
+
+**Контрпример:** `const total = tasks.length` не нужно мемоизировать. Использовать `useMemo` ради корректности нельзя: React может отбросить кеш. С включённым React Compiler необходимость ручной мемоизации часто уменьшается, но наличие Compiler нужно подтвердить настройками конкретного проекта.

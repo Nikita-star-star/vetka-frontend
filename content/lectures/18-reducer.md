@@ -56,3 +56,48 @@ export default function App() {
 Для одного флага `isOpen` или простого поля `title` reducer избыточен. Он оправдан, когда несколько связанных переходов трудно понять в нескольких отдельных обработчиках. Обновления reducer также участвуют в рендерах React; это не отдельное глобальное хранилище.
 
 Документация: [useReducer](https://react.dev/reference/react/useReducer).
+
+## От нескольких setter к reducer
+
+Если задача может быть добавлена, удалена и отмечена выполненной, обработчики часто повторяют операции над одним массивом. **Reducer** — чистая функция, которая принимает текущее состояние и описание действия, а возвращает новое состояние. **Action** — объект, указывающий, что произошло; **dispatch** — функция отправки действия React.
+
+```jsx
+import { useReducer } from 'react';
+
+function reducer(tasks, action) {
+  switch (action.type) {
+    case 'add':
+      return [...tasks, { id: crypto.randomUUID(), title: action.title }];
+    case 'remove':
+      return tasks.filter((task) => task.id !== action.id);
+    default:
+      return tasks;
+  }
+}
+
+export default function App() {
+  const [tasks, dispatch] = useReducer(reducer, []);
+  return (
+    <main>
+      <button onClick={() => dispatch({ type: 'add', title: 'Новая задача' })}>
+        Добавить
+      </button>
+      <p>Всего: {tasks.length}</p>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            {task.title}
+            <button onClick={() => dispatch({ type: 'remove', id: task.id })}>
+              Удалить
+            </button>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+Поток выполнения: обработчик вызывает `dispatch` → React ставит действие в очередь → вызывает reducer с текущим состоянием и action → получает новый массив → рендерит компонент с новым состоянием. Reducer нельзя использовать для HTTP-запросов, случайных побочных эффектов или изменения внешних переменных. Создание `id` выполняется до передачи действия: reducer остаётся чистым.
+
+Если state состоит из пары независимых полей, `useState` обычно понятнее. Reducer полезен, когда правила изменения сложны и хочется сосредоточить их в одном месте.

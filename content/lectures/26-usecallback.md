@@ -41,3 +41,37 @@ export default function App() {
 Не оборачивайте каждое событие в `useCallback`. Для обычного `<button onClick={...}>` без измеренной проблемы новая ссылка обычно несущественна. React Compiler в настроенном проекте также может выполнять memoization автоматически.
 
 Документация: [useCallback](https://react.dev/reference/react/useCallback).
+
+## Полный пример вместе с memo
+
+```jsx
+import { memo, useCallback, useState } from 'react';
+
+const ActionButton = memo(function ActionButton({ onAction }) {
+  console.log('Render ActionButton');
+  return <button onClick={onAction}>Увеличить</button>;
+});
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState('');
+
+  const increase = useCallback(() => {
+    setCount((previous) => previous + 1);
+  }, []);
+
+  return (
+    <main>
+      <p>Счётчик: {count}</p>
+      <input value={text} onChange={(event) => setText(event.target.value)} />
+      <ActionButton onAction={increase} />
+    </main>
+  );
+}
+```
+
+На каждом рендере `App` выражение `() => ...` без `useCallback` создало бы новую функцию. У функций, как и у объектов, сравнение по ссылке: две одинаковые записи не обязательно обозначают одну функцию. Поскольку `ActionButton` обёрнут в `memo`, стабильный `increase` позволяет ему пропускать часть ненужных повторных рендеров, пока остальные props не меняются.
+
+**Почему здесь зависимость пустая:** обработчик не читает `count` напрямую, а пользуется функциональной формой setter. Если бы функция читала изменяемые props или state из рендера, их пришлось бы включить в зависимости.
+
+**Когда пользы нет:** если `ActionButton` не обёрнут в `memo` и функция не используется как зависимость другого хука, стабильная ссылка сама по себе не даёт ощутимого результата. Добавление `useCallback` повсюду только усложняет код.
