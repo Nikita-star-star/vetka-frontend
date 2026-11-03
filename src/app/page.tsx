@@ -29,9 +29,9 @@ export default async function HomePage() {
         <div>
           <h2 className="text-lg font-semibold">Что вы изучите</h2>
           <ul className="mt-5 space-y-4 text-sm leading-6 text-muted-foreground">
-            <li className="flex gap-3"><Braces className="mt-0.5 size-4 shrink-0 text-foreground" /> Основы JavaScript, JSX и компонентный подход React.</li>
-            <li className="flex gap-3"><Layers3 className="mt-0.5 size-4 shrink-0 text-foreground" /> Props, состояние, формы, эффекты и Context API.</li>
-            <li className="flex gap-3"><BookOpen className="mt-0.5 size-4 shrink-0 text-foreground" /> HTTP-запросы, маршрутизация и структура проекта.</li>
+            <li className="flex gap-3"><Braces className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden="true" /> Основы JavaScript, JSX и компонентный подход React.</li>
+            <li className="flex gap-3"><Layers3 className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden="true" /> Props, состояние, формы, эффекты и Context API.</li>
+            <li className="flex gap-3"><BookOpen className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden="true" /> HTTP-запросы, маршрутизация и структура проекта.</li>
           </ul>
         </div>
         <div>
@@ -50,8 +50,8 @@ export default async function HomePage() {
       </section>
 
       <section className="flex flex-col gap-5 border-t py-10 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-3"><FlaskConical className="mt-1 size-5 shrink-0" /><div><h2 className="font-semibold">Лабораторные работы</h2><p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Три этапа лабораторных работ: от каталога задач до приложения с API и маршрутизацией.</p></div></div>
-        <Link href="/labs" className={cn(buttonVariants({ variant: "outline" }), "gap-2")}>Перейти к лабораторным работам <ArrowRight /></Link>
+        <div className="flex gap-3"><FlaskConical className="mt-1 size-5 shrink-0" aria-hidden="true" /><div><h2 className="font-semibold">Лабораторные работы</h2><p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Три этапа лабораторных работ: от каталога задач до приложения с API и маршрутизацией.</p></div></div>
+        <Link href="/labs" className={cn(buttonVariants({ variant: "outline" }), "gap-2")}>Перейти к лабораторным работам <ArrowRight aria-hidden="true" /></Link>
       </section>
     </main>
   );

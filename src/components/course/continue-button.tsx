@@ -14,7 +14,7 @@ export function ContinueButton({ firstLecture }: { firstLecture: string }) {
   return (
     <Link href={lastLecture ?? firstLecture} className={cn(buttonVariants({ size: "lg" }), "gap-2")}>
       {lastLecture ? "Продолжить обучение" : "Начать обучение"}
-      <ArrowRight />
+      <ArrowRight aria-hidden="true" />
     </Link>
   );
 }

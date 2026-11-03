@@ -131,7 +131,13 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
         className="top-[12%] max-w-[calc(100%-1rem)] sm:top-[18%] sm:max-w-xl"
       >
         <Command shouldFilter={false}>
-          <CommandInput value={query} onValueChange={setQuery} placeholder="Компоненты, useState, Fetch…" autoFocus />
+          <CommandInput
+            value={query}
+            onValueChange={setQuery}
+            placeholder="Компоненты, useState, Fetch…"
+            aria-label="Поиск по лекциям и лабораторным работам"
+            autoFocus
+          />
           <CommandList>
             <CommandEmpty>Ничего не найдено. Попробуйте другой запрос.</CommandEmpty>
             {!query.trim() && history.length > 0 && (

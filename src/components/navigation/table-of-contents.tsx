@@ -107,6 +107,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
                 onClick={(event) => handleSectionClick(event, item.id, index)}
                 data-toc-link
                 data-toc-id={item.id}
+                aria-current={activeId === item.id ? "location" : undefined}
                 className={cn(
                   "block py-1 text-xs leading-5 text-muted-foreground transition-colors duration-300 ease-out hover:text-foreground",
                   item.level === 3 ? "pl-5" : "pl-3",

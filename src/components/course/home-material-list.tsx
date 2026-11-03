@@ -25,6 +25,7 @@ export function HomeMaterialList({ materials }: { materials: MaterialSummary[] }
                 className={cn("size-4 shrink-0 transition-colors", complete ? "text-primary" : "text-muted-foreground")}
                 spring="smooth"
                 reducedMotion="user"
+                aria-hidden="true"
               />
               <span className={cn("text-xs text-muted-foreground transition-opacity duration-300", complete ? "opacity-100" : "opacity-0")} aria-hidden={!complete}>
                 Завершено

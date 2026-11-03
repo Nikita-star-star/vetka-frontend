@@ -29,7 +29,7 @@ export default async function LabsPage() {
                 </p>
                 <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">{lab.description}</p>
               </div>
-              <ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground" />
+              <ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             </Link>
           ))}
         </div>

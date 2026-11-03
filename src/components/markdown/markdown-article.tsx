@@ -82,7 +82,7 @@ export function MarkdownArticle({ markdown, kind }: { markdown: string; kind: Ma
             if (external) {
               return (
                 <a href={href} target="_blank" rel="noreferrer">
-                  {children}<ExternalLink className="ml-1 inline size-3" aria-hidden="true" />
+                  {children}<span className="sr-only"> (открывается в новой вкладке)</span><ExternalLink className="ml-1 inline size-3" aria-hidden="true" />
                 </a>
               );
             }

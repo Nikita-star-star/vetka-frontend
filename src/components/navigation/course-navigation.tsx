@@ -79,7 +79,8 @@ export function CourseNavigation({
                   >
                     <span className="w-5 shrink-0 font-mono text-xs leading-5 tabular-nums">{String(lecture.number).padStart(2, "0")}</span>
                     <span className="min-w-0 flex-1">{lecture.title}</span>
-                    <CircleCheck className="status-icon mt-0.5 size-4 shrink-0 text-primary" data-complete={complete} aria-label={complete ? "Завершено" : undefined} aria-hidden={!complete} />
+                    <CircleCheck className="status-icon mt-0.5 size-4 shrink-0 text-primary" data-complete={complete} aria-hidden="true" />
+                    {complete && <span className="sr-only">Завершено</span>}
                   </Link>
                 </li>
               );
@@ -97,7 +98,7 @@ export function CourseNavigation({
               pathname === "/labs" && "bg-muted font-medium text-foreground",
             )}
           >
-            <FlaskConical className="size-4" /> Все лабораторные
+            <FlaskConical className="size-4" aria-hidden="true" /> Все лабораторные
           </Link>
           <ol className="space-y-0.5">
             {labs.map((lab) => {
@@ -116,7 +117,8 @@ export function CourseNavigation({
                   >
                     <span className="w-5 shrink-0 font-mono text-xs leading-5 tabular-nums">Л{lab.number}</span>
                     <span className="min-w-0 flex-1">{lab.title.replace(/^Лабораторная работа №\d+\.\s*/, "")}</span>
-                    <CircleCheck className="status-icon mt-0.5 size-4 shrink-0 text-primary" data-complete={complete} aria-label={complete ? "Выполнено" : undefined} aria-hidden={!complete} />
+                    <CircleCheck className="status-icon mt-0.5 size-4 shrink-0 text-primary" data-complete={complete} aria-hidden="true" />
+                    {complete && <span className="sr-only">Выполнено</span>}
                   </Link>
                 </li>
               );
