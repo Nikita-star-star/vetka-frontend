@@ -15,7 +15,7 @@ export default async function HomePage() {
     <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-6xl px-5 py-10 outline-none sm:px-8 sm:py-16">
       <section className="grid gap-10 border-b pb-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
         <div className="max-w-3xl">
-          <p className="mb-4 text-sm font-medium text-primary">Последовательный курс · {lectures.length} лекций</p>
+          <p className="mb-4 text-sm font-medium text-primary dark:text-[oklch(0.78_0.13_258)]">Последовательный курс · {lectures.length} лекций</p>
           <h1 className="max-w-2xl text-balance text-3xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.08]">{title}</h1>
           <p className="mt-5 max-w-2xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg">{intro[0]}</p>
           <div className="mt-7"><ContinueButton firstLecture={firstLecture} /></div>

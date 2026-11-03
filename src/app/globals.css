@@ -118,10 +118,6 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
-.dark .text-primary {
-    color: oklch(0.78 0.13 258);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
