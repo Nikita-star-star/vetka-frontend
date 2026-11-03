@@ -19,23 +19,26 @@ export function CopyCodeButton({ code }: { code: string }) {
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="h-7 text-xs text-muted-foreground"
-      onClick={copy}
-      aria-label={copied ? "Код скопирован" : "Копировать код"}
-    >
-      <MorphIcon
-        icon={copied ? Check : Copy}
-        className="size-4"
-        spring="smooth"
-        reducedMotion="user"
-      />
-      <span className="hidden sm:inline">{copied ? "Скопировано" : "Копировать"}</span>
+    <>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-7 text-xs text-muted-foreground"
+        onClick={copy}
+        aria-label={copied ? "Код скопирован" : "Копировать код"}
+      >
+        <MorphIcon
+          icon={copied ? Check : Copy}
+          className="size-4"
+          spring="smooth"
+          reducedMotion="user"
+          aria-hidden="true"
+        />
+        <span className="hidden sm:inline">{copied ? "Скопировано" : "Копировать"}</span>
+      </Button>
       <span className="sr-only" role="status" aria-live="polite">
         {copied ? "Код скопирован" : ""}
       </span>
-    </Button>
+    </>
   );
 }

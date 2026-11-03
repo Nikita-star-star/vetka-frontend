@@ -27,6 +27,7 @@ export function FocusModeToggle() {
         className="size-4"
         spring="smooth"
         reducedMotion="user"
+        aria-hidden="true"
       />
     </Button>
   );

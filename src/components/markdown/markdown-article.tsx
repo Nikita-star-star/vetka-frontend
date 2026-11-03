@@ -38,7 +38,7 @@ export function MarkdownArticle({ markdown, kind }: { markdown: string; kind: Ma
       const Tag = `h${level}` as const;
       return (
         <Tag id={id}>
-          <a href={`#${id}`} aria-label={`Ссылка на раздел «${text}»`} className="no-underline">
+          <a href={`#${id}`} className="no-underline">
             {children}
           </a>
         </Tag>
@@ -75,7 +75,7 @@ export function MarkdownArticle({ markdown, kind }: { markdown: string; kind: Ma
               <table className="w-full min-w-[36rem] border-collapse text-left text-sm">{children}</table>
             </div>
           ),
-          th: ({ children }) => <th className="border-b bg-muted/60 px-4 py-2.5 font-medium">{children}</th>,
+          th: ({ children }) => <th scope="col" className="border-b bg-muted/60 px-4 py-2.5 font-medium">{children}</th>,
           td: ({ children }) => <td className="border-b px-4 py-2.5 align-top last:border-b-0">{children}</td>,
           a: ({ href = "", children }) => {
             const external = /^https?:/.test(href);

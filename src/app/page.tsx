@@ -12,7 +12,7 @@ export default async function HomePage() {
   const firstLecture = lectures[0]?.href ?? "/labs";
 
   return (
-    <main id="main-content" className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
+    <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-6xl px-5 py-10 outline-none sm:px-8 sm:py-16">
       <section className="grid gap-10 border-b pb-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
         <div className="max-w-3xl">
           <p className="mb-4 text-sm font-medium text-primary">Последовательный курс · {lectures.length} лекций</p>

@@ -28,7 +28,11 @@ export function PersistentCourseFrame({
         focusMode && "has-focus-mode",
       )}
     >
-      <aside className="course-sidebar course-sidebar-left sticky top-14 hidden h-[calc(100vh-3.5rem)] lg:block">
+      <aside
+        className="course-sidebar course-sidebar-left sticky top-14 hidden h-[calc(100vh-3.5rem)] lg:block"
+        aria-hidden={focusMode || undefined}
+        inert={focusMode}
+      >
         <CourseNavigation lectures={lectures} labs={labs} />
       </aside>
       <div className="min-w-0">{children}</div>

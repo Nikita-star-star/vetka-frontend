@@ -14,7 +14,7 @@ export default async function LabsPage() {
   const { lectures, labs } = await getMaterialSummaries();
   return (
     <CourseShell headings={[]}>
-      <div id="main-content" className="mx-auto max-w-3xl">
+      <div id="main-content" tabIndex={-1} className="mx-auto max-w-3xl outline-none">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Лабораторные работы</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">Закрепите материал в трёх последовательных проектах. Выполняйте их в своей среде разработки и отмечайте готовность вручную.</p>
         <div className="mt-8 rounded-xl border bg-muted/25 p-5">

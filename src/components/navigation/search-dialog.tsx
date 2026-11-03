@@ -113,10 +113,17 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
 
   return (
     <>
-      <Button variant="ghost" className="h-10 w-10 px-0 sm:h-9 sm:w-52 sm:justify-start sm:px-3" onClick={() => setOpen(true)}>
-        <Search className="size-5 sm:size-4" />
+      <Button
+        variant="ghost"
+        className="h-10 w-10 px-0 sm:h-9 sm:w-52 sm:justify-start sm:px-3"
+        onClick={() => setOpen(true)}
+        aria-label="Открыть поиск по курсу ⌘K"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+      >
+        <Search className="size-5 sm:size-4" aria-hidden="true" />
         <span className="hidden text-muted-foreground sm:inline">Поиск по курсу</span>
-        <kbd className="ml-auto hidden rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground md:inline">
+        <kbd aria-hidden="true" className="ml-auto hidden rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground md:inline">
           ⌘K
         </kbd>
       </Button>
@@ -128,7 +135,8 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
         }}
         title="Поиск по курсу"
         description="Ищите по лекциям, лабораторным и разделам"
-        className="top-[12%] max-w-[calc(100%-1rem)] sm:top-[18%] sm:max-w-xl"
+        showCloseButton
+        className="top-[12%] max-w-[calc(100%-1rem)] [&_[data-slot=command-input-wrapper]]:pr-10 sm:top-[18%] sm:max-w-xl"
       >
         <Command shouldFilter={false}>
           <CommandInput
@@ -138,13 +146,20 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
             aria-label="Поиск по лекциям и лабораторным работам"
             autoFocus
           />
+          <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+            {query.trim()
+              ? results.length
+                ? `Найдено результатов: ${results.length}. Используйте стрелки вверх и вниз для выбора.`
+                : "По вашему запросу ничего не найдено."
+              : "Введите запрос для поиска по курсу."}
+          </p>
           <CommandList>
             <CommandEmpty>Ничего не найдено. Попробуйте другой запрос.</CommandEmpty>
             {!query.trim() && history.length > 0 && (
               <CommandGroup heading="Недавние поиски">
                 {history.map((item) => (
                   <CommandItem key={`history-${item}`} value={`history-${item}`} className="min-h-11 py-3 text-base sm:min-h-0 sm:py-1.5 sm:text-sm" onSelect={() => setQuery(item)}>
-                    <History className="size-5 text-muted-foreground sm:size-4" />
+                    <History className="size-5 text-muted-foreground sm:size-4" aria-hidden="true" />
                     <span className="truncate">{item}</span>
                   </CommandItem>
                 ))}
@@ -153,7 +168,7 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
             <CommandGroup heading={query ? "Результаты" : "Материалы курса"}>
               {results.map((entry) => (
                 <CommandItem key={entry.id} value={entry.id} onSelect={() => select(entry)} className="items-start min-h-14 py-3 text-base sm:min-h-0 sm:py-2.5 sm:text-sm">
-                  {entry.kind === "lecture" ? <BookOpen className="mt-0.5 size-5 sm:size-4" /> : <FlaskConical className="mt-0.5 size-5 sm:size-4" />}
+                  {entry.kind === "lecture" ? <BookOpen className="mt-0.5 size-5 sm:size-4" aria-hidden="true" /> : <FlaskConical className="mt-0.5 size-5 sm:size-4" aria-hidden="true" />}
                   <span className="min-w-0">
                     <span className="block truncate font-medium">{entry.section ?? entry.title}</span>
                     <span className="block truncate text-xs text-muted-foreground">

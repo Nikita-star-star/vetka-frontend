@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
 function normalize(value: string) {
@@ -10,8 +10,10 @@ function normalize(value: string) {
 export function SearchHighlight() {
   const searchParams = useSearchParams();
   const query = searchParams.get("highlight")?.trim();
+  const announcementRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
+    if (announcementRef.current) announcementRef.current.textContent = "";
     const term = query?.split(/\s+/).filter(Boolean).sort((a, b) => b.length - a.length)[0];
     const root = document.querySelector<HTMLElement>("[data-search-content]");
     if (!term || !root) return;
@@ -37,7 +39,10 @@ export function SearchHighlight() {
       }
     }
 
-    if (!node || index < 0) return;
+    if (!node || index < 0) {
+      if (announcementRef.current) announcementRef.current.textContent = `Слово «${term}» не найдено на странице.`;
+      return;
+    }
 
     const range = document.createRange();
     range.setStart(node, index);
@@ -45,7 +50,24 @@ export function SearchHighlight() {
     const mark = document.createElement("mark");
     mark.className = "search-highlight";
     range.surroundContents(mark);
-    mark.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    const focusTarget = mark.closest<HTMLElement>("p, li, blockquote, dd, dt, h2, h3, h4") ?? mark;
+    const hadTabIndex = focusTarget.hasAttribute("tabindex");
+    if (!hadTabIndex) focusTarget.setAttribute("tabindex", "-1");
+    focusTarget.setAttribute("data-search-focus-target", "true");
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    mark.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+
+    const context = focusTarget.textContent?.replace(/\s+/g, " ").trim() ?? "";
+    const frame = window.requestAnimationFrame(() => {
+      focusTarget.focus({ preventScroll: true });
+      if (announcementRef.current) {
+        announcementRef.current.textContent = context
+          ? `Найдено слово «${term}». ${context}`
+          : `Найдено слово «${term}». Фокус перемещён к совпадению.`;
+      }
+    });
 
     const removeMark = () => {
       const parent = mark.parentNode;
@@ -63,10 +85,15 @@ export function SearchHighlight() {
     }, 1800);
 
     return () => {
+      window.cancelAnimationFrame(frame);
       window.clearTimeout(cleanup);
       removeMark();
+      focusTarget.removeAttribute("data-search-focus-target");
+      if (!hadTabIndex) focusTarget.removeAttribute("tabindex");
     };
   }, [query]);
 
-  return null;
+  return (
+    <p ref={announcementRef} className="sr-only" role="status" aria-live="polite" aria-atomic="true" />
+  );
 }

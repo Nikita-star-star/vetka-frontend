@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ProgressProvider } from "@/components/course/progress-provider";
@@ -11,6 +11,33 @@ function ScrollToTopOnRouteChange() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+function FocusMainContentOnRouteChange() {
+  const pathname = usePathname();
+  const initialRender = useRef(true);
+
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+
+    if (new URLSearchParams(window.location.search).has("highlight")) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>("#main-content h1")
+        ?? document.querySelector<HTMLElement>("#main-content");
+      if (!target) return;
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.setAttribute("data-route-focus-target", "true");
+      target.focus({ preventScroll: true });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [pathname]);
 
   return null;
@@ -42,6 +69,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ProgressProvider>
           <FocusModeContext.Provider value={focusValue}>
             <ScrollToTopOnRouteChange />
+            <FocusMainContentOnRouteChange />
             {children}
           </FocusModeContext.Provider>
         </ProgressProvider>

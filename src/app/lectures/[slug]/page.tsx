@@ -27,7 +27,7 @@ export default async function LecturePage({ params }: { params: Promise<{ slug: 
   return (
     <CourseShell headings={material.headings}>
       <LastLecture href={material.href} />
-      <div id="main-content" className="mx-auto max-w-[70ch]">
+      <div id="main-content" tabIndex={-1} className="mx-auto max-w-[70ch] outline-none">
         <p className="mb-3 flex items-center gap-2 text-sm text-muted-foreground"><BookOpen className="size-4" aria-hidden="true" /> Лекция {String(material.number).padStart(2, "0")}</p>
         <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{material.title}</h1>
         <div className="mt-10"><MarkdownArticle markdown={material.markdown} kind="lecture" /></div>

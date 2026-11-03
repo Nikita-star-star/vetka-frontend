@@ -24,7 +24,7 @@ export default async function LabPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <CourseShell headings={material.headings}>
-      <div id="main-content" className="mx-auto max-w-[70ch]">
+      <div id="main-content" tabIndex={-1} className="mx-auto max-w-[70ch] outline-none">
         <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{material.title}</h1>
         <div className="mt-10"><MarkdownArticle markdown={material.markdown} kind="lab" /></div>
         <div className="mt-10"><MaterialToggle id={material.id} kind="lab" /></div>

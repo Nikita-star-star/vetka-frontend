@@ -82,7 +82,7 @@ function CommandInput({
           {...props}
         />
         <InputGroupAddon>
-          <SearchIcon className="size-5 shrink-0 opacity-50 sm:size-4" />
+          <SearchIcon className="size-5 shrink-0 opacity-50 sm:size-4" aria-hidden="true" />
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -162,7 +162,7 @@ function CommandItem({
       {...props}
     >
       {children}
-      <CheckIcon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      <CheckIcon aria-hidden="true" className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
     </CommandPrimitive.Item>
   )
 }

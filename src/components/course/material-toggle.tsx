@@ -24,14 +24,17 @@ export function MaterialToggle({ id, kind }: { id: string; kind: MaterialKind })
         className="size-4"
         spring="smooth"
         reducedMotion="user"
+        aria-hidden="true"
       />
-      {complete
-        ? kind === "lecture"
-          ? "Отменить завершение"
-          : "Отменить выполнение"
-        : kind === "lecture"
-          ? "Завершить лекцию"
-          : "Отметить выполненной"}
+      <span aria-live="polite">
+        {complete
+          ? kind === "lecture"
+            ? "Отменить завершение"
+            : "Отменить выполнение"
+          : kind === "lecture"
+            ? "Завершить лекцию"
+            : "Отметить выполненной"}
+      </span>
     </Button>
   );
 }
