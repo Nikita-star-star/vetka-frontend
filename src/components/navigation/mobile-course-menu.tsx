@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { CourseNavigation } from "@/components/navigation/course-navigation";
 import type { MaterialSummary } from "@/lib/course-types";
 
-export function MobileCourseMenu({ lectures, labs }: { lectures: MaterialSummary[]; labs: MaterialSummary[] }) {
+export function MobileCourseMenu({ lectures }: { lectures: MaterialSummary[] }) {
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -18,7 +18,7 @@ export function MobileCourseMenu({ lectures, labs }: { lectures: MaterialSummary
         <SheetHeader className="border-b px-5 py-4">
           <SheetTitle>Содержание курса</SheetTitle>
         </SheetHeader>
-        <CourseNavigation className="min-h-0 flex-1" lectures={lectures} labs={labs} onNavigate={() => setOpen(false)} />
+        <CourseNavigation className="min-h-0 flex-1" lectures={lectures} onNavigate={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
   );

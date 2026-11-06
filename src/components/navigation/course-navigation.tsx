@@ -11,12 +11,10 @@ import type { MaterialSummary } from "@/lib/course-types";
 
 export function CourseNavigation({
   lectures,
-  labs,
   onNavigate,
   className,
 }: {
   lectures: MaterialSummary[];
-  labs: MaterialSummary[];
   onNavigate?: () => void;
   className?: string;
 }) {
@@ -119,43 +117,6 @@ export function CourseNavigation({
               <FlaskConical className="size-4" aria-hidden="true" /> Все
               лабораторные
             </Link>
-            <ol className="space-y-0.5">
-              {labs.map((lab) => {
-                const active = pathname === lab.href;
-                const complete = hydrated && isComplete("lab", lab.id);
-                return (
-                  <li key={lab.id}>
-                    <Link
-                      href={lab.href}
-                      onClick={onNavigate}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                      "flex min-h-9 items-start gap-2 rounded-md px-2 py-2 text-sm leading-5 text-muted-foreground transition-[background-color,color] duration-300 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                        active && "bg-muted font-medium text-foreground",
-                      )}
-                    >
-                      <span className="w-5 shrink-0 font-mono text-xs leading-5 tabular-nums">
-                        Л{lab.number}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        {lab.title.replace(
-                          /^Лабораторная работа №\d+\.\s*/,
-                          "",
-                        )}
-                      </span>
-                      <span
-                        className="status-icon mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary text-white"
-                        data-complete={complete}
-                        aria-hidden="true"
-                      >
-                        <Check className="size-3" strokeWidth={3} aria-hidden="true" />
-                      </span>
-                      {complete && <span className="sr-only">Выполнено</span>}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ol>
           </div>
         </nav>
       </ScrollArea>

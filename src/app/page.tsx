@@ -8,7 +8,7 @@ import { getCourseOverview, getMaterialSummaries } from "@/lib/course";
 import { cn } from "@/lib/utils";
 
 export default async function HomePage() {
-  const [{ title, intro }, { lectures, labs }] = await Promise.all([getCourseOverview(), getMaterialSummaries()]);
+  const [{ title, intro }, { lectures }] = await Promise.all([getCourseOverview(), getMaterialSummaries()]);
   const firstLecture = lectures[0]?.href ?? "/labs";
 
   return (
@@ -21,7 +21,7 @@ export default async function HomePage() {
           <div className="mt-7"><ContinueButton firstLecture={firstLecture} /></div>
         </div>
         <div className="rounded-xl border bg-muted/25 p-5">
-          <ProgressSummary lectureIds={lectures.map((item) => item.id)} labIds={labs.map((item) => item.id)} />
+          <ProgressSummary lectureIds={lectures.map((item) => item.id)} labIds={[]} />
         </div>
       </section>
 

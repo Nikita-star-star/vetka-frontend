@@ -115,7 +115,7 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
     <>
       <Button
         variant="ghost"
-        className="h-10 w-10 px-0 sm:h-9 sm:w-52 sm:justify-start sm:px-3"
+        className="h-10 w-10 px-0 sm:h-9 sm:w-52 sm:justify-start sm:bg-muted/40 sm:px-3 sm:hover:bg-muted/70"
         onClick={() => setOpen(true)}
         aria-label="Открыть поиск по курсу ⌘K"
         aria-haspopup="dialog"

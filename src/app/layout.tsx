@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [{ lectures, labs }, searchEntries] = await Promise.all([getMaterialSummaries(), getSearchIndex()]);
+  const [{ lectures }, searchEntries] = await Promise.all([getMaterialSummaries(), getSearchIndex()]);
   return (
     <html lang="ru" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable}`}>
       <body>
         <Providers>
           <a href="#main-content" className="skip-link">Перейти к содержимому</a>
-          <AppHeader lectures={lectures} labs={labs} searchEntries={searchEntries} />
-          <PersistentCourseFrame lectures={lectures} labs={labs}>
+          <AppHeader lectures={lectures} searchEntries={searchEntries} />
+          <PersistentCourseFrame lectures={lectures}>
             {children}
           </PersistentCourseFrame>
         </Providers>

@@ -24,6 +24,7 @@ function internalHref(href: string, kind: MaterialKind) {
   const parts = filePath.split("/");
   const file = parts.at(-1) ?? "";
   const targetKind = filePath.includes("labs/") || (kind === "lab" && !filePath.includes("lectures/")) ? "labs" : "lectures";
+  if (targetKind === "labs") return "/labs";
   const slug = targetKind === "lectures" ? file.replace(/^\d+-?/, "") : file;
   return `/${targetKind}/${slug}${hash ? `#${hash}` : ""}`;
 }

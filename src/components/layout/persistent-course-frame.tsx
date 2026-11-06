@@ -8,11 +8,9 @@ import { cn } from "@/lib/utils";
 
 export function PersistentCourseFrame({
   lectures,
-  labs,
   children,
 }: {
   lectures: MaterialSummary[];
-  labs: MaterialSummary[];
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -33,7 +31,7 @@ export function PersistentCourseFrame({
         aria-hidden={focusMode || undefined}
         inert={focusMode}
       >
-        <CourseNavigation lectures={lectures} labs={labs} />
+        <CourseNavigation lectures={lectures} />
       </aside>
       <div className="min-w-0">{children}</div>
     </div>

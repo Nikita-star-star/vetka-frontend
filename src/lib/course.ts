@@ -159,7 +159,7 @@ export async function getMaterialSummaries() {
     slug: material.slug,
     title: material.title,
     description: material.description,
-    href: material.href,
+    href: material.kind === "lab" ? "/labs" : material.href,
   });
   return {
     lectures: lectures.map(toSummary),
@@ -177,7 +177,7 @@ export async function getSearchIndex(): Promise<SearchEntry[]> {
       kind: material.kind,
       title: material.title,
       excerpt: plainText(material.markdown).slice(0, 900),
-      href: material.href,
+      href: material.kind === "lab" ? "/labs" : material.href,
     });
 
     const sections = material.markdown.split(/(?=^#{2,3}\s+)/gm).slice(1);
@@ -193,7 +193,7 @@ export async function getSearchIndex(): Promise<SearchEntry[]> {
         title: material.title,
         section: heading.text,
         excerpt: plainText(section.replace(/^#{2,3}.*$/m, "")).slice(0, 500),
-        href: `${material.href}#${heading.id}`,
+        href: material.kind === "lab" ? "/labs" : `${material.href}#${heading.id}`,
       });
     }
   }
